@@ -3,10 +3,25 @@
 @extends('layouts.template')
 
 @section('content')
-    <h1 class="mb-3">{{ $post->title }}</h1>
-    {{-- Menghilangkan fungsi htmlspecialchars --}}
-    {{-- Karena jika tidak menggunakan tanda ! maka otomatis menjalankan fungsi htmlspecialchars --}}
-    <p>{!! $post->body !!}</p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="mb-3">{{ $post->title }}</h2>
 
-    <a href="/posts">Kembali ke Posts</a>
+                <h5 class="mb-3">By: <a href="/posts?a={{ $post->author->username }}">{{ $post->author->name }}</a> in <a
+                        href="/posts?c={{ $post->category->slug }}">{{ $post->category->name }}</a></h5>
+
+
+                <img src="https://source.unsplash.com/1200x400?{{ $post->category->name }}" class="card-img-top img-fluid"
+                    alt="{{ $post->category->name }}">
+                {{-- Menghilangkan fungsi htmlspecialchars --}}
+                {{-- Karena jika tidak menggunakan tanda ! maka otomatis menjalankan fungsi htmlspecialchars --}}
+                <article class="my-3">
+                    <p>{!! $post->body !!}</p>
+                </article>
+
+                <a href="/posts">Kembali ke Posts</a>
+            </div>
+        </div>
+    </div>
 @endsection
