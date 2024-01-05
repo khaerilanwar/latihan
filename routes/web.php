@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\DashboardPostController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RegistrasiController;
 use App\Models\Category;
-use App\Models\Post;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,19 +44,19 @@ Route::get('/categories', function () {
     ];
     return view('categories', $data);
 });
-Route::get('/categories/{category:slug}', function (Category $category) {
+
+Route::get('/dashboard', function () {
     $data = [
-        'title' => "Post By: $category->name",
-        'active' => 'categories',
-        'posts' => $category->posts->load('category', 'author'),
-        'name' => $category->name
+        'title' => 'My Dashboard',
+        'active' => 'dashboard'
     ];
-    return view('posts', $data);
-});
-Route::get('/authors/{author:username}', function (User $author) {
-    $data = [
-        'title' => "Post By: $author->name",
-        'posts' => $author->posts->load('category', 'author')
-    ];
-    return view('posts', $data);
-});
+    return view('dashboard.index', $data);
+})->middleware('auth');
+
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/login', [LoginController::class, 'authentication']);
+Route::get('/register', [RegistrasiController::class, 'index'])->middleware('guest');
+Route::post('/register', [RegistrasiController::class, 'store']);
+Route::post('/logout', [LoginController::class, 'logout']);
+Route::get('/dashboard/posts/checkSlug', [DashboardPostController::class, 'checkSlug'])->middleware('auth');
+Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');

@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
 
     // Mendefinisikan nama kolom yang boleh diisi
     // protected $fillable = ['title', 'excerpt', 'body'];
@@ -28,7 +29,15 @@ class Post extends Model
                 $query->where('slug', $c);
             });
         });
-        $query->when($filters['a'] ?? false, fn ($query, $a) => $query->where('username', $a));
+        $query->when(
+            $filters['a'] ?? false,
+            fn ($query, $a) =>
+            $query->whereHas(
+                'author',
+                fn ($query) =>
+                $query->where('username', $a)
+            )
+        );
     }
 
     public function category()
@@ -41,5 +50,19 @@ class Post extends Model
         // Parameter kedua menandakan memberikan nama alias
         // bahwa field author sama dengan kolom user_id di tabel database
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => ['title', 'id']
+            ]
+        ];
     }
 }

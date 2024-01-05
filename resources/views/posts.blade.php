@@ -63,4 +63,9 @@
     @else
         <h3 class="text-center">Not Found</h3>
     @endif
+
+    <div class="d-flex justify-content-center">
+        {{ $posts->links() }}
+    </div>
+
 @endsection
