@@ -12,8 +12,10 @@
                         href="/posts?c={{ $post->category->slug }}">{{ $post->category->name }}</a></h5>
 
 
-                <img src="https://source.unsplash.com/1200x400?{{ $post->category->name }}" class="card-img-top img-fluid"
-                    alt="{{ $post->category->name }}">
+                <div style="max-height: 350px; overflow: hidden">
+                    <img src="{{ $post->image ? asset('storage/' . $post->image) : 'https://source.unsplash.com/1200x400?' . $post->category->name }}"
+                        class="card-img-top img-fluid" alt="{{ $post->category->name }}">
+                </div>
                 {{-- Menghilangkan fungsi htmlspecialchars --}}
                 {{-- Karena jika tidak menggunakan tanda ! maka otomatis menjalankan fungsi htmlspecialchars --}}
                 <article class="my-3">

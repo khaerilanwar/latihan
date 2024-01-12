@@ -1,13 +1,14 @@
 @extends('dashboard.layouts.main')
 
 @section('content')
-    <h2 class="mb-3">Create new post</h2>
+    <h2 class="mb-3">Edit post</h2>
     <div class="col-lg-8">
-        <form action="/dashboard/posts" method="POST" enctype="multipart/form-data">
+        <form action="/dashboard/posts/{{ $post->slug }}" method="POST" enctype="multipart/form-data">
+            @method('put')
             @csrf
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input type="text" value="{{ old('title') }}" name="title"
+                <input type="text" value="{{ old('title', $post->title) }}" name="title"
                     class="form-control @error('title')
                     is-invalid
                 @enderror"
@@ -20,7 +21,7 @@
             </div>
             <div class="mb-3">
                 <label for="slug" class="form-label">Slug</label>
-                <input type="text" value="{{ old('slug') }}" name="slug"
+                <input type="text" value="{{ old('slug', $post->slug) }}" name="slug"
                     class="form-control @error('slug')
                 is-invalid
             @enderror" id="slug"
@@ -35,14 +36,21 @@
                 <label for="slug" class="form-label">Kategori</label>
                 <select class="form-select" name="category_id">
                     @foreach ($categories as $category)
-                        <option {{ old('category_id') == $category->id ? 'selected' : '' }} value="{{ $category->id }}">
+                        <option {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}
+                            value="{{ $category->id }}">
                             {{ $category->name }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Post Image</label>
-                <img src="" alt="" class="img-preview img-fluid mb-3 col-sm-5">
+                <input type="hidden" name="oldImage" value="{{ $post->image }}">
+                @if ($post->image)
+                    <img src="{{ asset('storage/' . $post->image) }}" alt=""
+                        class="img-preview img-fluid mb-3 col-sm-5 d-block">
+                @else
+                    <img src="" alt="" class="img-preview img-fluid mb-3 col-sm-5">
+                @endif
                 <input onchange="previewImage()"
                     class="form-control @error('image')
                 is-invalid
@@ -56,13 +64,13 @@
             </div>
             <div class="mb-3">
                 <label for="body" class="form-label">Body</label>
-                <input id="body" type="hidden" value="{{ old('body') }}" name="body" required>
+                <input id="body" type="hidden" value="{{ old('body', $post->body) }}" name="body" required>
                 <trix-editor input="body"></trix-editor>
                 @error('body')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-primary">Create Post</button>
+            <button type="submit" class="btn btn-primary">Update Post</button>
         </form>
     </div>
 

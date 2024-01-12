@@ -9,16 +9,21 @@
                 <a href="/dashboard/posts" class="btn btn-success">
                     <i class="bi bi-arrow-left"></i> Back to all my posts
                 </a>
-                <a href="" class="btn btn-warning">
+                <a href="/dashboard/posts/{{ $post->slug }}/edit" class="btn btn-warning">
                     <i class="bi bi-pen"></i> Edit
                 </a>
-                <a href="" class="btn btn-danger">
-                    <i class="bi bi-trash"></i> Hapus
-                </a>
+                <form action="/dashboard/posts/{{ $post->slug }}" method="POST" class="d-inline">
+                    @method('delete')
+                    @csrf
+                    <button class="btn btn-danger" onclick="return confirm('Apa kamu yakin ?')">
+                        <i class="bi bi-trash"></i> Hapus
+                    </button>
+                </form>
 
-
-                <img src="https://source.unsplash.com/1200x400?{{ $post->category->name }}"
-                    class="card-img-top img-fluid mt-3" alt="{{ $post->category->name }}">
+                <div style="max-height: 350px; overflow: hidden">
+                    <img src="{{ $post->image ? asset('storage/' . $post->image) : 'https://source.unsplash.com/1200x400?' . $post->category->name }}"
+                        class="card-img-top img-fluid mt-3" alt="{{ $post->category->name }}">
+                </div>
                 {{-- Menghilangkan fungsi htmlspecialchars --}}
                 {{-- Karena jika tidak menggunakan tanda ! maka otomatis menjalankan fungsi htmlspecialchars --}}
                 <article class="my-3">

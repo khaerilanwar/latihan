@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        User::factory(5)->create();
+        User::factory(4)->create();
 
         Post::factory(30)->create();
 
@@ -42,11 +42,12 @@ class DatabaseSeeder extends Seeder
             'slug' => 'personal'
         ]);
 
-        // User::create([
-        //     'name' => 'Khaeril Anwar',
-        //     'email' => 'khaerilanwar@gmail.com',
-        //     'password' => bcrypt('12345'),
-        // ]);
+        User::create([
+            'name' => 'Khaeril Anwar',
+            'username' => 'khaeril',
+            'email' => 'khaerilanwar@gmail.com',
+            'password' => bcrypt('12345'),
+        ]);
 
         // User::create([
         //     'name' => 'Nihayatul Fathiyah',
